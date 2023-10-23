@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page import="com.greencom.parking.java.Car_data"%>
+<%@ page import="com.parking.greencom.java.Car_data"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.HashMap"%>
