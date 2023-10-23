@@ -31,9 +31,22 @@
 			document.loginFrm.user_pw.focus();
 			return;
 		}
-		document.loginFrm.action = "<%=cPath%>/api/member/login.do";
-		top.document.location.reload();
-		document.loginFrm.submit();
+		fetch("<%=cPath%>/api/member/login.do?user_id="+document.loginFrm.user_id.value+"&user_pw="+document.loginFrm.user_pw.value, { 
+			method: "POST"
+		}).then((res) => {
+			if (res.status === 200) {
+				console.log(res.json().then((res) => {
+					if (res.result === "success") {
+						top.document.location.reload();
+					}
+
+					if (res.result === "invaild_id_password") {
+						alert("아이디혹은 비밀번호가 일치 하지 않습니다.");
+					}
+				}))
+				//
+			}
+		})
 	}
 	
 	function logout() {
@@ -41,8 +54,9 @@
 			method: 'POST'
 		}).then((res) => {
 			if (res.status === 200) {
-				top.document.location.reload();
+				
 			}
+			top.document.location.reload();
 		})
 	}
 	

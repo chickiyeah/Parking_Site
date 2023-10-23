@@ -90,7 +90,7 @@ public class MemberController extends HttpServlet{
 	
 	@ResponseBody
 	@RequestMapping(value = "/api/member/login.do", method = RequestMethod.POST)
-	public ResponseEntity<?> Login(@RequestParam Map requestMap, HttpServletRequest request) {
+	public String Login(@RequestParam Map requestMap, HttpServletRequest request) {
 		HttpHeaders headers = new HttpHeaders();
 		HttpSession session = request.getSession();
 		Map<String, Object> user = User_Manager.Login(requestMap);
@@ -99,10 +99,11 @@ public class MemberController extends HttpServlet{
 		
 		if (user.get("error") != null) {
 			headers.setLocation(URI.create("/parking/main/left"));
-	        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+			return "{\"result\" : \""+String.valueOf(user.get("error"))+"\"}";
+	        
 		} else {
 			headers.setLocation(URI.create("/parking/main/left?error?="+user.get("error")));
-	        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+	        return "{\"result\" : \"success\"}";
 		}
 	}
 	
@@ -123,22 +124,22 @@ public class MemberController extends HttpServlet{
 		HttpHeaders headers = new HttpHeaders();
 		
 		if (res == "Success") {			
-	        headers.setLocation(URI.create("/parking/main/main"));
+	        headers.setLocation(URI.create("/main/main"));
 	        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 		} else {
 			if (res == "error (uid_select,_update_failed)") {
-				headers.setLocation(URI.create("/parking/member/register?error=uid_error"));
+				headers.setLocation(URI.create("/member/register?error=uid_error"));
 		        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 			} else {
 				if (res == "error (phone_error)") {
-					headers.setLocation(URI.create("/parking/member/register?error=phone_error"));
+					headers.setLocation(URI.create("/member/register?error=phone_error"));
 			        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 				} else {
 					if (res == "error (user_insert_failed)") {
-						headers.setLocation(URI.create("/parking/member/register?error=insert_error"));
+						headers.setLocation(URI.create("/member/register?error=insert_error"));
 				        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 					} else {
-						headers.setLocation(URI.create("/parking/member/register?error=unknown_error"));
+						headers.setLocation(URI.create("/member/register?error=unknown_error"));
 				        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 					}
 				}
