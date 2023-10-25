@@ -86,6 +86,16 @@ public class Car_data {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		long usage_hour = res_min / 60;
+		long usage_min = res_min - (usage_hour * 60);
+		long usage_day = 0;
+		while (usage_hour >= 24) {
+			usage_hour = usage_hour - 24;
+			usage_day = usage_day + 1;
+		}
+
+		this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
 		
 		this.car_map.put("elapse_min", res_min);
 		return res_min;
@@ -213,6 +223,17 @@ public class Car_data {
 					this.car_map.put("discount_list", discount_list);
 				} else {
 					unfree_time = res_min - freetime;
+
+					long usage_hour = res_min / 60;
+					long usage_day = 0;
+					long usage_min = res_min - (usage_hour * 60);
+					while (usage_hour >= 24) {
+						usage_hour = usage_hour - 24;
+						usage_day = usage_day + 1;
+					}
+				
+					this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
+
 					
 					Integer cur_money = base_money;
 					System.out.println("unfree_time : "+unfree_time);
@@ -222,18 +243,20 @@ public class Car_data {
 					System.out.println("free_time : "+freetime);
 					
 					//1일 이상 요금
-					if (res_min >= 1440) {
-						cur_money = day_price;
-						unfree_time = res_min - 1440;
-						while (unfree_time >= per_min) {
-							cur_money = cur_money + per_money;
-							unfree_time = unfree_time - per_min;
-						}
-					} else {
-						cur_money = base_money;
-						while (unfree_time >= per_min) {
-							cur_money = cur_money + per_money;
-							unfree_time = unfree_time - per_min;
+					while (res_min >= 1440) {
+						if (res_min >= 1440) {
+							cur_money = day_price;
+							unfree_time = res_min - 1440;
+							while (unfree_time >= per_min) {
+								cur_money = cur_money + per_money;
+								unfree_time = unfree_time - per_min;
+							}
+						} else {
+							cur_money = base_money;
+							while (unfree_time >= per_min) {
+								cur_money = cur_money + per_money;
+								unfree_time = unfree_time - per_min;
+							}
 						}
 					}
 					
