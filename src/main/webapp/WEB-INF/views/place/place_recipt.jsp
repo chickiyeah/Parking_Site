@@ -48,7 +48,6 @@
 					<td>차량 번호</td>
 					<td>입차 시간</td>
 					<td>출차 시간</td>
-					<td>주차장 이용시간</td>
 					<td>금액</td>
 				</tr>
 					<tr align="center">
@@ -60,9 +59,6 @@
 					</td>
 					<td>
 						<span>${end_time }</span>
-					</td>
-					<td>
-						<span>${usage_time}</span>
 					</td>
 					<td>
 						<span>${money } 원</span>

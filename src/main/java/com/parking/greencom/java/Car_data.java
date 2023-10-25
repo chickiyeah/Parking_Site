@@ -87,15 +87,16 @@ public class Car_data {
 			e.printStackTrace();
 		}
 
-		long usage_hour = res_min / 60;
+		/*long usage_hour = res_min / 60;
 		long usage_min = res_min - (usage_hour * 60);
 		long usage_day = 0;
 		while (usage_hour >= 24) {
 			usage_hour = usage_hour - 24;
 			usage_day = usage_day + 1;
-		}
+			System.out.println("is deadrock u?");
+		} */
 
-		this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
+		//this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
 		
 		this.car_map.put("elapse_min", res_min);
 		return res_min;
@@ -154,7 +155,7 @@ public class Car_data {
 				mem_sql = "select place from user where car_num = ?";
 				mem_psmt = mem_con.prepareStatement(mem_sql);
 				mem_psmt.setString(1, car_num);
-				mem_rs = mem_psmt.executeQuery();
+				
 				
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, place);
@@ -224,23 +225,25 @@ public class Car_data {
 				} else {
 					unfree_time = res_min - freetime;
 
-					long usage_hour = res_min / 60;
+					/*long usage_hour = res_min / 60;
 					long usage_day = 0;
 					long usage_min = res_min - (usage_hour * 60);
 					while (usage_hour >= 24) {
 						usage_hour = usage_hour - 24;
 						usage_day = usage_day + 1;
+						System.out.println("is deadrock d?");
 					}
 				
 					this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
+					*/
 
 					
 					Integer cur_money = base_money;
-					System.out.println("unfree_time : "+unfree_time);
+					//System.out.println("unfree_time : "+unfree_time);
 					//무료 시간 확인
 					
-					System.out.println("res_min : "+res_min);
-					System.out.println("free_time : "+freetime);
+					//System.out.println("res_min : "+res_min);
+					//System.out.println("free_time : "+freetime);
 					
 					//1일 이상 요금
 					while (res_min >= 1440) {
@@ -277,7 +280,7 @@ public class Car_data {
 								cur_money = cur_money + per_money;
 								unfree_time = unfree_time - per_min;
 							}
-							System.out.println("onetime = "+one_time_discount_per);
+							//System.out.println("onetime = "+one_time_discount_per);
 							if (one_time_discount_per != 0) {
 								discount_list.put("one_time_over", one_time_discount_per);
 							}
@@ -285,6 +288,8 @@ public class Car_data {
 						}
 					}
 					
+					mem_rs = mem_psmt.executeQuery();
+
 					//회원 추가할인
 					if (mem_rs.next()) {
 						long total_free = freetime + member_plus_freetime;
@@ -323,7 +328,7 @@ public class Car_data {
 					
 					
 					//등록된 차량 확인
-					System.out.println(s_register_car);
+					//System.out.println(s_register_car);
 					try {
 						List<String> register_car = gson.fromJson(s_register_car, new TypeToken<List<String>>(){}.getType());
 						
@@ -333,7 +338,7 @@ public class Car_data {
 							cur_money = 0;
 						}
 					} catch (Exception e) {
-						System.out.println("등록된차 조희에 실패했습니다. 차량 번호 : "+car_num);
+						//System.out.println("등록된차 조희에 실패했습니다. 차량 번호 : "+car_num);
 					}
 					this.car_map.put("discount_list", discount_list);
 					this.car_map.put("money", cur_money);

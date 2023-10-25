@@ -694,7 +694,6 @@ public class Place_Manager {
 		Car_data car = new Car_data();
 		
 		LocalDateTime now = LocalDateTime.now();
-		String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		
 		List<Map<String, Object>> res = new ArrayList<Map<String, Object>>();
 
@@ -713,7 +712,11 @@ public class Place_Manager {
 					car.set_recipt(rs.getInt("recipt_id"));
 				}
 				res.add(car.get_car());
+
+				System.out.println("car info generating");
 			}
+
+			System.out.println("car info generated");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
