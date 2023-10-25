@@ -54,6 +54,7 @@
 					<td>차량 번호</td>
 					<td>입차 시간</td>
 					<td>출차 시간</td>
+					<td>주차장 이용 시간</td>
 					<td>금액</td>
 				</tr>
 					<tr align="center">
@@ -67,11 +68,14 @@
 						<span>${end_time }</span>
 					</td>
 					<td>
+						<span>${usage_time}</span>
+					</td>
+					<td>
 						<span>${money } 원</span>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4">
+					<td colspan="5">
 						<!-- 할인 목록 -->
 						<table width="100%" cellpadding="2" cellspacing="0" border="1">
 							<tr>
@@ -127,7 +131,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4"><button type="submit" style="width:100%">출차하기</button></td>
+					<td colspan="5"><button type="submit" style="width:100%">출차하기</button></td>
 				</tr>
 			</table>
 			<input type="hidden" name="car_num" value="${car_num }">
