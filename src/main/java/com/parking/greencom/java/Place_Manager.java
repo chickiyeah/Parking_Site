@@ -715,9 +715,7 @@ public class Place_Manager {
 
 				System.out.println("car info generating");
 			}
-
-			System.out.println("car info generated");
-			
+			System.out.println("car info generated");				
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
