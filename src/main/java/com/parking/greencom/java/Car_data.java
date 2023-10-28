@@ -91,7 +91,7 @@ public class Car_data {
 				System.out.println("is deadrock u?");
 			}
 				
-			this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
+			this.car_map.put("usage_time",usage_day+" 일 "+usage_hour+" 시간 "+usage_min+" 분 ");
 			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -145,7 +145,8 @@ public class Car_data {
 			Integer one_time_discount_per = 0;
 			Integer base_money = 0;
 			
-			Map<String, Object> discount_list = new HashMap<String, Object>();
+			Map<String, List<Integer>> discount_list = new HashMap<String, List<Integer>>();
+			//리스트 0 : 할인율, 1 : 할인금액
 			
 			String s_register_car = "";
 			try {
@@ -220,7 +221,10 @@ public class Car_data {
 				
 				if (res_min <= freetime) {
 					this.car_map.put("money", 0);
-					discount_list.put("in_time", 100);
+					List<Integer> in_time = new ArrayList<Integer>();
+					in_time.add(100);
+					in_time.add(base_money);
+					discount_list.put("in_time", in_time);
 					this.car_map.put("discount_list", discount_list);
 				} else {
 					long usage_hour = res_min / 60;
@@ -232,7 +236,7 @@ public class Car_data {
 						System.out.println("is deadrock d?");
 					}
 				
-					this.car_map.put("usage_time",usage_day+"일 "+usage_hour+" 시간 "+usage_min+" 분 ");
+					this.car_map.put("usage_time",usage_day+" 일 "+usage_hour+" 시간 "+usage_min+" 분 ");
 
 					unfree_time = res_min - freetime;
 					
@@ -259,7 +263,14 @@ public class Car_data {
 						}
 					}
 					
-					
+					List<Integer> to_base = new ArrayList<Integer>();
+				
+					Integer base_total_money = cur_money;
+
+					to_base.add(0);
+					to_base.add(base_total_money);
+					discount_list.put("base_money", to_base);
+					Integer cal_deff = 0;
 					
 					Gson gson = new Gson();
 					
@@ -267,8 +278,11 @@ public class Car_data {
 					List<String> one_time_cars = gson.fromJson(one_time_register_cars, new TypeToken<List<String>>(){}.getType());
 					if (one_time_cars.contains(car_num)) {
 						if (res_min <= one_time_register_free_min) {
+							List<Integer> one_time_discount = new ArrayList<Integer>();
+							one_time_discount.add(100);
+							one_time_discount.add(cur_money);
+							discount_list.put("one_time", one_time_discount);
 							cur_money = 0;
-							discount_list.put("one_time", 100);
 						} else {
 							unfree_time = res_min - one_time_register_free_min;
 							cur_money = base_money;
@@ -277,10 +291,14 @@ public class Car_data {
 								unfree_time = unfree_time - per_min;
 							}
 							System.out.println("onetime = "+one_time_discount_per);
+							cur_money = (int) (cur_money - (cur_money / (100 / one_time_discount_per)));
+							List<Integer> one_time_discount = new ArrayList<Integer>();
 							if (one_time_discount_per != 0) {
-								discount_list.put("one_time_over", one_time_discount_per);
+								one_time_discount.add(one_time_discount_per);
+								cal_deff = base_total_money - cur_money;
+								one_time_discount.add(cal_deff);
 							}
-							cur_money = (int) (cur_money - (cur_money / one_time_discount_per));
+							discount_list.put("one_time_over", one_time_discount);
 						}
 					}
 					
@@ -291,32 +309,48 @@ public class Car_data {
 							cur_money = 0;
 						} else {
 							unfree_time = res_min - total_free;
+							List<Integer> member_discount = new ArrayList<Integer>(); 
+							cur_money = (int) (cur_money - (cur_money / (100 / member_discount_per)));
 							if (member_discount_per != 0) {
-								discount_list.put("member", member_discount_per);
+								member_discount.add(member_discount_per);
+								cal_deff = base_total_money - cur_money;
+								member_discount.add(cal_deff);
+								discount_list.put("member", member_discount);
 							}
-							cur_money = (int) (cur_money - (cur_money / member_discount_per));
 						}
 					}
 					
 					//할인
 					if (kind.equals("small")) {
-						cur_money = (int) (cur_money - (cur_money / kind_small_sale_per));
+						cur_money = (int) (cur_money - (cur_money / (100 / kind_small_sale_per)));
 						if (kind_small_sale_per != 0) {
-							discount_list.put("kind_small", kind_small_sale_per);
+							List<Integer> kind_small_sale = new ArrayList<Integer>();
+							kind_small_sale.add(kind_small_sale_per);
+							cal_deff = base_total_money - cur_money;
+							kind_small_sale.add(cal_deff);
+							discount_list.put("kind_small", kind_small_sale);
 						}
 					}
 					
 					if (kind.equals("medium")) {
-						cur_money = (int) (cur_money - (cur_money / kind_medium_sale_per));
+						cur_money = (int) (cur_money - (cur_money / (100 / kind_medium_sale_per)));
 						if (kind_medium_sale_per != 0) {
-							discount_list.put("kind_medium", kind_medium_sale_per);
+							List<Integer> kind_medium_sale = new ArrayList<Integer>();
+							kind_medium_sale.add(kind_medium_sale_per);
+							cal_deff = base_total_money - cur_money;
+							kind_medium_sale.add(cal_deff);
+							discount_list.put("kind_small", kind_medium_sale);
 						}
 					}
 					
 					if (kind.equals("large")) {
-						cur_money = (int) (cur_money - (cur_money / kind_large_sale_per));
+						cur_money = (int) (cur_money - (cur_money / (100 / kind_large_sale_per)));
 						if (kind_large_sale_per != 0) {
-							discount_list.put("kind_large", kind_large_sale_per);
+							List<Integer> kind_large_sale = new ArrayList<Integer>();
+							kind_large_sale.add(kind_large_sale_per);
+							cal_deff = base_total_money - cur_money;
+							kind_large_sale.add(cal_deff);
+							discount_list.put("kind_small", kind_large_sale);
 						}
 					}
 					
@@ -328,7 +362,10 @@ public class Car_data {
 						
 						if (register_car.contains(car_num)) {
 							discount_list.clear();
-							discount_list.put("register_car", 100);
+							List<Integer> register_sale = new ArrayList<Integer>();
+							register_sale.add(100);
+							register_sale.add(base_total_money);
+							discount_list.put("register_car", register_sale);
 							cur_money = 0;
 						}
 					} catch (Exception e) {

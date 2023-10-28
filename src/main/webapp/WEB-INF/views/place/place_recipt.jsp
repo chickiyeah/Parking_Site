@@ -20,7 +20,8 @@
 	Gson gson = new Gson();
 	Map<String, Map<String, Object>> recipt_d = pMgr.get_recipt(c_data);
 	Map<String, Object> recipt = recipt_d.get("recipt");
-	Map<String, Integer> discount = gson.fromJson(String.valueOf(recipt.get("discount")), new TypeToken<Map<String, Integer>>(){}.getType());
+	Map<String, List<Integer>> discount = new HashMap<String, List<Integer>>();
+	discount = gson.fromJson(String.valueOf(car.get("discount_list")), new TypeToken<Map<String, List<Integer>>>(){}.getType());
     
 %>
 <html>
@@ -94,48 +95,54 @@
 							<tr bgcolor=#dddddd>
 								<td align="center">할인 종류</td>
 								<td align="center">할인률 (%)</td>
+								<td align="center">할인 금액 (원)</td>
 							</tr>
 							<%
 								for (String type : discount.keySet()) {
 									String r_type = "";
-									Integer percent = Integer.parseInt(String.valueOf(discount.get(type)));
-									if (type.equals("in_time")) {
-										r_type = "무료시간 내 출차";
-									}
-									
-									if (type.equals("kind_small")) {
-										r_type = "소형 차량 할인";
-									}
-									
-									if (type.equals("kind_medium")) {
-										r_type = "중형 차량 할인";
-									}
-									
-									if (type.equals("kind_large")) {
-										r_type = "대형 차량 할인";
-									}
-									
-									if (type.equals("member")) {
-										r_type = "회원 할인";
-									}
-									
-									if (type.equals("one_time")) {
-										r_type = "회차 차량 할인";
-									}
-									
-									if (type.equals("one_time_over")) {
-										r_type = "회차 차량 시간 초과분 추가 할인";
-									}
-									
-									if (type.equals("register_car")) {
-										r_type = "등록된 차량";
-									}
+									List<Integer> value = discount.get(type);
+									Integer percent = value.get(0); //할인율
+									Integer money = value.get(1); //할인 금액
+
+									if (type.equals("base_money") == false) {
+										if (type.equals("in_time")) {
+											r_type = "무료시간 내 출차";
+										}
+										
+										if (type.equals("kind_small")) {
+											r_type = "소형 차량 할인";
+										}
+										
+										if (type.equals("kind_medium")) {
+											r_type = "중형 차량 할인";
+										}
+										
+										if (type.equals("kind_large")) {
+											r_type = "대형 차량 할인";
+										}
+										
+										if (type.equals("member")) {
+											r_type = "회원 할인";
+										}
+										
+										if (type.equals("one_time")) {
+											r_type = "회차 차량 할인";
+										}
+										
+										if (type.equals("one_time_over")) {
+											r_type = "회차 차량 시간 초과분 추가 할인";
+										}
+										
+										if (type.equals("register_car")) {
+											r_type = "등록된 차량";
+										}
 							%>
 							<tr>
 								<td bgcolor=#dddddd align="center"> <span><%=r_type %></span> </td>
 								<td align="center"><span><%=percent %> %</span></td>
+								<td align="center"><span><%=money %> 원</span></td>
 							</tr>
-							<%} %>
+							<%}else{}} %>
 						</table>
 					</td>
 				</tr>

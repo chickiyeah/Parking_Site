@@ -1,6 +1,7 @@
 package com.parking.greencom.green_parking_11.controller;
 
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.parking.greencom.java.Car_data;
 import com.parking.greencom.java.Place_Manager;
 import com.parking.greencom.java.Place_data;
@@ -105,11 +108,23 @@ public class PlaceController {
 	public String place_out(@RequestParam Map requestMap, Model model) {
 		if (requestMap.get("numb") != null) {
 			Car_data car = Place_Manager.get_out_pre(requestMap);
+
+			DecimalFormat decFormat = new DecimalFormat("###,###");
+
 			Map<String, Object> s_car = car.get_car();
+			Gson gson = new Gson();
+			Map<String, List<Integer>> discount = new HashMap<String, List<Integer>>();
+			discount = gson.fromJson(String.valueOf(s_car.get("discount_list")), new TypeToken<Map<String, List<Integer>>>(){}.getType());
+			List<Integer> to_base_money = discount.get("base_money");
+
+			System.out.println(to_base_money.toString());
+
 			model.addAllAttributes(car.get_car());
 			model.addAttribute("numb", requestMap.get("numb"));
 			model.addAttribute("start_time", String.valueOf(s_car.get("start_time")).substring(0,19));
 			model.addAttribute("car_num", car.get_car_num());
+			model.addAttribute("total_base_money", decFormat.format(to_base_money.get(1)));
+			model.addAttribute("money", decFormat.format(Integer.valueOf(String.valueOf(s_car.get("money")))));
 			return "place/place_out";
 		} else {
 			return "main/main";

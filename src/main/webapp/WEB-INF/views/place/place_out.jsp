@@ -6,6 +6,7 @@
 <%@ page import="com.google.gson.Gson"%>
 <%@ page import="com.google.gson.GsonBuilder"%>
 <%@ page import="com.google.gson.reflect.TypeToken"%>
+<%@ page import="java.text.DecimalFormat"%>
 <jsp:useBean id="pMgr" class="com.parking.greencom.java.Place_Manager"/>
 <%	
 	String cPath = request.getContextPath();
@@ -21,9 +22,11 @@
 	Map<String, Object> car = car_d.get_car();
 	
 	Gson gson = new Gson();
+
+	DecimalFormat decFormat = new DecimalFormat("###,###");
 	System.out.println(car.get("discount_list"));
-	Map<String, Integer> discount = new HashMap<String, Integer>();
-	discount = gson.fromJson(String.valueOf(car.get("discount_list")), new TypeToken<Map<String, Integer>>(){}.getType());
+	Map<String, List<Integer>> discount = new HashMap<String, List<Integer>>();
+	discount = gson.fromJson(String.valueOf(car.get("discount_list")), new TypeToken<Map<String, List<Integer>>>(){}.getType());
     
 %>
 <html>
@@ -55,6 +58,7 @@
 					<td>입차 시간</td>
 					<td>출차 시간</td>
 					<td>주차장 이용 시간</td>
+					<td>할인 전 총 금액</td>
 					<td>금액</td>
 				</tr>
 					<tr align="center">
@@ -71,67 +75,77 @@
 						<span>${usage_time}</span>
 					</td>
 					<td>
+						<span>${total_base_money} 원</span>
+					</td>
+					<td>
 						<span>${money } 원</span>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5">
+					<td colspan="6">
 						<!-- 할인 목록 -->
 						<table width="100%" cellpadding="2" cellspacing="0" border="1">
 							<tr>
-								<td align="center" bgcolor=#dddddd colspan="2">할인 내용</td>
+								<td align="center" bgcolor=#dddddd colspan="3">할인 내용</td>
 							</tr>
 							<tr bgcolor=#dddddd>
-								<td align="center">할인 종류</td>
-								<td align="center">할인률 (%)</td>
+								<td align="center" width="50%">할인 종류</td>
+								<td align="center" width="20%">할인률 (%)</td>
+								<td align="center" width="30%">할인 금액 (원)</td>
 							</tr>
 								<%
 								if (discount != null) {
 									for (String type : discount.keySet()) {
 										String r_type = "";
-										Integer percent = Integer.parseInt(String.valueOf(discount.get(type)));
-										if (type.equals("in_time")) {
-											r_type = "무료시간 내 출차";
-										}
-										
-										if (type.equals("kind_small")) {
-											r_type = "소형 차량 할인";
-										}
-										
-										if (type.equals("kind_medium")) {
-											r_type = "중형 차량 할인";
-										}
-										
-										if (type.equals("kind_large")) {
-											r_type = "대형 차량 할인";
-										}
-										
-										if (type.equals("member")) {
-											r_type = "회원 할인";
-										}
-										
-										if (type.equals("one_time")) {
-											r_type = "회차 차량 할인";
-										}
-										
-										if (type.equals("one_time_over")) {
-											r_type = "회차 차량 시간 초과분 추가 할인";
-										}
-										
-										if (type.equals("register_car")) {
-											r_type = "등록된 차량";
-										}
+										List<Integer> value_s = discount.get(type);
+										Integer percent = value_s.get(0); //할인율
+										System.out.println(type);
+										String money = decFormat.format(value_s.get(1)); //할인 금액
+
+										if (type.equals("base_money") == false) {
+											if (type.equals("in_time")) {
+												r_type = "무료시간 내 출차";
+											}
+											
+											if (type.equals("kind_small")) {
+												r_type = "소형 차량 할인";
+											}
+											
+											if (type.equals("kind_medium")) {
+												r_type = "중형 차량 할인";
+											}
+											
+											if (type.equals("kind_large")) {
+												r_type = "대형 차량 할인";
+											}
+											
+											if (type.equals("member")) {
+												r_type = "회원 할인";
+											}
+											
+											if (type.equals("one_time")) {
+												r_type = "회차 차량 할인";
+											}
+											
+											if (type.equals("one_time_over")) {
+												r_type = "회차 차량 시간 초과분 추가 할인";
+											}
+											
+											if (type.equals("register_car")) {
+												r_type = "등록된 차량";
+											}
 								%>
 								<tr>
 									<td bgcolor=#dddddd align="center"> <span><%=r_type %></span> </td>
 									<td align="center"><span><%=percent %> %</span></td>
+									<td align="center"><span><%=money %> 원</span></td>
 								</tr>
-								<%} }%>
+								<%} else {} }  }%>
 						</table>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5"><button type="submit" style="width:100%">출차하기</button></td>
+					<td colspan="6"><button type="submit" style="width:100%">출차하기</button></td>
 				</tr>
 			</table>
 			<input type="hidden" name="car_num" value="${car_num }">
