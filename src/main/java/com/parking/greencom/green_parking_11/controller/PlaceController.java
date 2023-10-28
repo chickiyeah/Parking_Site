@@ -198,10 +198,17 @@ public class PlaceController {
 	
 	@RequestMapping(value="/place/recipt", method = RequestMethod.GET)
 	public String recipt(@RequestParam Map requestMap, Model model) {
+		DecimalFormat decFormat = new DecimalFormat("###,###");
 		Map<String, Map<String, Object>> s_recipt = Place_Manager.get_recipt(requestMap);
 		Map<String, Object> recipt = s_recipt.get("recipt");
 		Map<String, Object> place = s_recipt.get("place");
 		Map<String, Object> s_car = s_recipt.get("car");
+
+		Gson gson = new Gson();
+		Map<String, List<Integer>> discount = new HashMap<String, List<Integer>>();
+		discount = gson.fromJson(String.valueOf(recipt.get("discount")), new TypeToken<Map<String, List<Integer>>>(){}.getType());
+		List<Integer> to_base_money = discount.get("base_money");
+
 		model.addAllAttributes(s_car);
 		model.addAllAttributes(place);
 		model.addAllAttributes(recipt);
@@ -212,6 +219,7 @@ public class PlaceController {
 		model.addAttribute("end_time", String.valueOf(s_car.get("end_time")).substring(0,19));
 		model.addAttribute("created_at", String.valueOf(recipt.get("created_at")).substring(0,19));
 		model.addAttribute("car_num", s_car.get("Car_num"));
+		model.addAttribute("total_base_money", decFormat.format(to_base_money.get(1)));
 		return "place/place_recipt";
 	}
 	

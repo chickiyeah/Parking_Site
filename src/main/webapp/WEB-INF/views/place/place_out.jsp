@@ -99,7 +99,6 @@
 										String r_type = "";
 										List<Integer> value_s = discount.get(type);
 										Integer percent = value_s.get(0); //할인율
-										System.out.println(type);
 										String money = decFormat.format(value_s.get(1)); //할인 금액
 
 										if (type.equals("base_money") == false) {

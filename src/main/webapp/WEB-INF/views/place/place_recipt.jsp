@@ -6,6 +6,7 @@
 <%@ page import="com.google.gson.Gson"%>
 <%@ page import="com.google.gson.GsonBuilder"%>
 <%@ page import="com.google.gson.reflect.TypeToken"%>
+<%@ page import="java.text.DecimalFormat"%>
 <jsp:useBean id="pMgr" class="com.parking.greencom.java.Place_Manager"/>
 <%	
 	String cPath = request.getContextPath();
@@ -15,13 +16,14 @@
 	Map<String, String> c_data = new HashMap<String, String>();
 	
 	c_data.put("numb", request.getParameter("numb"));
-	c_data.put("car_num", request.getParameter("car_num"));
 	 
 	Gson gson = new Gson();
+
+	DecimalFormat decFormat = new DecimalFormat("###,###");
 	Map<String, Map<String, Object>> recipt_d = pMgr.get_recipt(c_data);
 	Map<String, Object> recipt = recipt_d.get("recipt");
 	Map<String, List<Integer>> discount = new HashMap<String, List<Integer>>();
-	discount = gson.fromJson(String.valueOf(car.get("discount_list")), new TypeToken<Map<String, List<Integer>>>(){}.getType());
+	discount = gson.fromJson(String.valueOf(recipt.get("discount")), new TypeToken<Map<String, List<Integer>>>(){}.getType());
     
 %>
 <html>
@@ -49,12 +51,13 @@
 					<td>차량 번호</td>
 					<td>입차 시간</td>
 					<td>출차 시간</td>
-					<td>주차장 이용시간</td>
+					<td>주차장 이용 시간</td>
+					<td>할인 전 총 금액</td>
 					<td>금액</td>
 				</tr>
 					<tr align="center">
 					<td>
-						<span>${car_num }</span>
+						<span name="car_num">${car_num }</span>
 					</td>
 					<td>
 						<span>${start_time }</span>
@@ -66,11 +69,14 @@
 						<span>${usage_time}</span>
 					</td>
 					<td>
+						<span>${total_base_money} 원</span>
+					</td>
+					<td>
 						<span>${money } 원</span>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5">
+					<td colspan="6">
 						<table width="100%" cellpadding="2" cellspacing="0" border="1">
 							<tr align="center">
 								<td>주차장 이름</td>
@@ -86,11 +92,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5">
+					<td colspan="6">
 						<!-- 할인 목록 -->
 						<table width="100%" cellpadding="2" cellspacing="0" border="1">
 							<tr>
-								<td align="center" bgcolor=#dddddd colspan="2">할인 내용</td>
+								<td align="center" bgcolor=#dddddd colspan="3">할인 내용</td>
 							</tr>
 							<tr bgcolor=#dddddd>
 								<td align="center">할인 종류</td>
@@ -102,7 +108,7 @@
 									String r_type = "";
 									List<Integer> value = discount.get(type);
 									Integer percent = value.get(0); //할인율
-									Integer money = value.get(1); //할인 금액
+									String money = decFormat.format(value.get(1)); //할인 금액
 
 									if (type.equals("base_money") == false) {
 										if (type.equals("in_time")) {
