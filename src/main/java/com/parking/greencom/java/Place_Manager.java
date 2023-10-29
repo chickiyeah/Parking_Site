@@ -3,6 +3,7 @@ package com.parking.greencom.java;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -533,13 +534,13 @@ public class Place_Manager {
 		return "success";
 	}
 	
-	public static Map<String, Integer> get_month_money(Map<String, String> request) {
+	public static Map<String, String> get_month_money(Map<String, String> request) {
 		DBConnectionMgr pool = DBConnectionMgr.getInstance();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		Map<String, Integer> res = new HashMap<String, Integer>();
+		Map<String, String> res = new HashMap<String, String>();
 		LocalDateTime now = LocalDateTime.now();
 		String formatedyear = now.format(DateTimeFormatter.ofPattern("yyyy"));
 		String formatedmonth = now.format(DateTimeFormatter.ofPattern("MM"));
@@ -629,20 +630,22 @@ public class Place_Manager {
 				}
 			}
 			
-			res.put("m_1", m_1);
-			res.put("m_2", m_2);
-			res.put("m_3", m_3);
-			res.put("m_4", m_4);
-			res.put("m_5", m_5);
-			res.put("m_6", m_6);
-			res.put("m_7", m_7);
-			res.put("m_8", m_8);
-			res.put("m_9", m_9);
-			res.put("m_10", m_10);
-			res.put("m_11", m_11);
-			res.put("m_12", m_12);
-			res.put("today", today);
-			res.put("today_use", today_use);
+			DecimalFormat decFormat = new DecimalFormat("###,###");
+
+			res.put("m_1", decFormat.format(m_1));
+			res.put("m_2", decFormat.format(m_2));
+			res.put("m_3", decFormat.format(m_3));
+			res.put("m_4", decFormat.format(m_4));
+			res.put("m_5", decFormat.format(m_5));
+			res.put("m_6", decFormat.format(m_6));
+			res.put("m_7", decFormat.format(m_7));
+			res.put("m_8", decFormat.format(m_8));
+			res.put("m_9", decFormat.format(m_9));
+			res.put("m_10", decFormat.format(m_10));
+			res.put("m_11", decFormat.format(m_11));
+			res.put("m_12", decFormat.format(m_12));
+			res.put("today", decFormat.format(today));
+			res.put("today_use", decFormat.format(today_use));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
