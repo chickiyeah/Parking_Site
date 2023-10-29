@@ -271,6 +271,8 @@ public class Car_data {
 					to_base.add(base_total_money);
 					discount_list.put("base_money", to_base);
 					Integer cal_deff = 0;
+
+					Integer bf_cur = 0;
 					
 					Gson gson = new Gson();
 					
@@ -310,10 +312,11 @@ public class Car_data {
 						} else {
 							unfree_time = res_min - total_free;
 							List<Integer> member_discount = new ArrayList<Integer>(); 
+							bf_cur = cur_money;
 							cur_money = (int) (cur_money - (cur_money / (100 / member_discount_per)));
 							if (member_discount_per != 0) {
 								member_discount.add(member_discount_per);
-								cal_deff = base_total_money - cur_money;
+								cal_deff = bf_cur - cur_money;
 								member_discount.add(cal_deff);
 								discount_list.put("member", member_discount);
 							}
@@ -322,33 +325,36 @@ public class Car_data {
 					
 					//할인
 					if (kind.equals("small")) {
+						bf_cur = cur_money;
 						cur_money = (int) (cur_money - (cur_money / (100 / kind_small_sale_per)));
 						if (kind_small_sale_per != 0) {
 							List<Integer> kind_small_sale = new ArrayList<Integer>();
 							kind_small_sale.add(kind_small_sale_per);
-							cal_deff = base_total_money - cur_money;
+							cal_deff = bf_cur - cur_money;
 							kind_small_sale.add(cal_deff);
 							discount_list.put("kind_small", kind_small_sale);
 						}
 					}
 					
 					if (kind.equals("medium")) {
+						bf_cur = cur_money;
 						cur_money = (int) (cur_money - (cur_money / (100 / kind_medium_sale_per)));
 						if (kind_medium_sale_per != 0) {
 							List<Integer> kind_medium_sale = new ArrayList<Integer>();
 							kind_medium_sale.add(kind_medium_sale_per);
-							cal_deff = base_total_money - cur_money;
+							cal_deff = bf_cur - cur_money;
 							kind_medium_sale.add(cal_deff);
 							discount_list.put("kind_small", kind_medium_sale);
 						}
 					}
 					
 					if (kind.equals("large")) {
+						bf_cur = cur_money;
 						cur_money = (int) (cur_money - (cur_money / (100 / kind_large_sale_per)));
 						if (kind_large_sale_per != 0) {
 							List<Integer> kind_large_sale = new ArrayList<Integer>();
 							kind_large_sale.add(kind_large_sale_per);
-							cal_deff = base_total_money - cur_money;
+							cal_deff = bf_cur - cur_money;
 							kind_large_sale.add(cal_deff);
 							discount_list.put("kind_small", kind_large_sale);
 						}

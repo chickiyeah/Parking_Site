@@ -220,6 +220,7 @@ public class PlaceController {
 		model.addAttribute("created_at", String.valueOf(recipt.get("created_at")).substring(0,19));
 		model.addAttribute("car_num", s_car.get("Car_num"));
 		model.addAttribute("total_base_money", decFormat.format(to_base_money.get(1)));
+		model.addAttribute("money", decFormat.format(Integer.valueOf(String.valueOf(s_car.get("money")))));
 		return "place/place_recipt";
 	}
 	
