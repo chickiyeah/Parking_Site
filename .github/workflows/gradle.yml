@@ -50,3 +50,4 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "deploy/parking.war"
         target: ${{ secrets.target_dir }}
+        overwrite: "true"
