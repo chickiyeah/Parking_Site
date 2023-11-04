@@ -51,3 +51,11 @@ jobs:
         source: "deploy/parking.war"
         target: ${{ secrets.target_dir }}
         overwrite: "true"
+        script: |
+         systemctl stop tomcat9.service
+         cp /var/lib/tomcat9/webapps/parking.war /var/lib/tomcat9/back_webapp/parking.war
+         rm -rf /var/lib/tomcat9/webapps/parking
+         cp /var/lib/tomcat9/deploy/parking.war /var/lib/tomcat9/webapps/parking.war
+         rm -rf /var/lib/tomcat9/webapps/deploy
+         systemctl restart tomcat9.service
+         systemctl restart apache2
