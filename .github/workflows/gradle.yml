@@ -34,3 +34,17 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew clean build --stacktrace
+
+    - name: Make directory
+      run: mkdir -p deploy
+
+    - name: Copy War
+      run: cp ./build/libs/*.war ./deploy
+
+    - name: Run sshpass commands
+      uses: matheusvanzan/sshpass-action@v2
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        user: ${{ secrets.SERVER_USER }}
+        pass: ${{ secrets.SERVER_PASS }}
+        run: sshpass -p 1234 scp ./deploy/*.war greencom_stu@greencom.kro.kr:/var/lib/tomcat9/webapps/.
