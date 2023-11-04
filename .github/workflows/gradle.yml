@@ -39,10 +39,14 @@ jobs:
       run: mkdir -p deploy
 
     - name: Copy War
-      run: cp ./build/libs/*.war ./deploy
-
-    - name: prepare sshpass
-      run: sudo apt-get install sshpass
+      run: cp ./build/libs/green_parking_11-0.0.1-SNAPSHOT.war ./deploy/parking.war
       
-    - name: Run sshpass commands
-      run: sudo sshpass -p 1234 scp ./deploy/*.war greencom_stu@${{ secrets.SERVER_HOST }}:/var/lib/tomcat9/webapps/.
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        password: ${{ secrets.SERVER_PASS }}
+        port: ${{ secrets.PORT }}
+        source: "deploy/parking.war"
+        target: ${{ secrets.target_dir }}
