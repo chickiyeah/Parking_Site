@@ -61,6 +61,7 @@ jobs:
         port: 22
         debug: true
         script: |
+          sudo su
           systemctl stop tomcat9.service
           cp /var/lib/tomcat9/webapps/parking.war /var/lib/tomcat9/back_webapp/parking.war
           rm -rf /var/lib/tomcat9/webapps/parking
