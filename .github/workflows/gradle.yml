@@ -49,7 +49,7 @@ jobs:
         password: ${{ secrets.SERVER_PASS }}
         port: ${{ secrets.PORT }}
         source: "deploy/parking.war"
-        target: ${{ secrets.target_dir }}
+        target: ${{ secrets.target_dir }}/webapps
         overwrite: "true"
 
     - name: File Touch with SSH
