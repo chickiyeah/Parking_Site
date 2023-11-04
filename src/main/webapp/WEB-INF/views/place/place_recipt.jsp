@@ -33,7 +33,11 @@
 
 </head>
 <script>
-
+	function print_recipt(element) {
+		element.style.display = "none";
+		window.print();
+		element.style.display = "";
+	}
 </script>
 <body bgcolor="#FFFFCC">
 	<div align="center">
@@ -153,6 +157,7 @@
 					</td>
 				</tr>
 			</table>
+			<input type="button" style="margin-top:20px" onclick="print_recipt(this)" value="출력하기">
 			<input type="hidden" name="numb" value="${numb }">
 		</form>
 	</div>

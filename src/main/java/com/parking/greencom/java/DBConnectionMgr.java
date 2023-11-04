@@ -13,7 +13,7 @@ import java.util.Vector;
 public class DBConnectionMgr {
     private Vector connections = new Vector(10);
     private String _driver = "com.mysql.cj.jdbc.Driver",
-    _url = "jdbc:mysql://193.123.249.160:3306/green_parking?useUnicode=true&characterEncoding=UTF-8&useSSL=false",
+    _url = "jdbc:mysql://localhost:3306/green_parking?useUnicode=true&characterEncoding=UTF-8&useSSL=false",
     _user = "green",
     _password = "dlstn0722";
 
