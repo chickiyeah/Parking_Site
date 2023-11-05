@@ -34,18 +34,30 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew clean build --stacktrace
+
+    - name: War to Artifact for deploy
+      uses: actions/upload-artifact@v3
+      with:
+       name: War artifact
+       path: ./build/libs
+ 
+ 
   
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-    
+    - name: download Artifact
+      uses: actions/download-artifact@v3
+      with:
+       name: War artifact
+       
     - name: Make directory
       run: mkdir -p deploy
 
     - name: Copy War
-      run: cp ./build/libs/green_parking_11-0.0.1-SNAPSHOT.war ./deploy/parking.war
+      run: cp ./green_parking_11-0.0.1-SNAPSHOT.war ./deploy/parking.war
       
     - name: copy file via ssh password
       uses: appleboy/scp-action@v0.1.4
