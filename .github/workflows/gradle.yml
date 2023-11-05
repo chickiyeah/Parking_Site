@@ -34,7 +34,13 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew clean build --stacktrace
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
+    steps:
+    
     - name: Make directory
       run: mkdir -p deploy
 
