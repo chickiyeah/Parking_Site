@@ -40,8 +40,6 @@ jobs:
       with:
        name: War artifact
        path: ./build/libs
- 
- 
   
   deploy:
     needs: build
